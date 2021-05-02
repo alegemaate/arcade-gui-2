@@ -30,7 +30,6 @@ find_library(ALLEGRO_IMAGE_LIBRARY NAMES allegro_image REQUIRED)
 find_library(ALLEGRO_MAIN_LIBRARY NAMES allegro_main REQUIRED)
 find_library(ALLEGRO_PRIMITIVES_LIBRARY NAMES allegro_primitives REQUIRED)
 find_library(ALLEGRO_TTF_LIBRARY NAMES allegro_ttf REQUIRED)
-find_library(BOX2D_LIBRARY NAMES Box2D REQUIRED)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
 # Link Libs
@@ -44,5 +43,4 @@ target_link_libraries(${PROJECT_NAME} ${ALLEGRO_IMAGE_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_MAIN_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_PRIMITIVES_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_TTF_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${BOX2D_LIBRARY})
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)

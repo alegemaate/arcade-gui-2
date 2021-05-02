@@ -9,6 +9,8 @@
 
 #ifdef __unix__
 #include <cstdlib>
+#elif defined(_WIN32) || defined(WIN32)
+#include <shlwapi.h>
 #endif
 
 // Scale of icon in focus
@@ -48,6 +50,7 @@ void Menu::loadGames(const std::string& path) {
 Menu::Menu() {
   // Focused game
   game_focus = 0;
+  icon_transition = 0;
 
   // Create buffer
   buffer = al_create_bitmap(SCREEN_W, SCREEN_H);
@@ -76,7 +79,7 @@ void Menu::update() {
 #ifdef __unix__
       system(games[game_focus].path);
 #elif defined(_WIN32) || defined(WIN32)
-      ShellExecute(NULL, "open", games[game_focus].path.c_str(), NULL, NULL,
+      ShellExecute(NULL, "open", games.at(game_focus).path.c_str(), NULL, NULL,
                    SW_SHOWDEFAULT);
 #endif
     }
