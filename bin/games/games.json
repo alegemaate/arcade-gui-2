@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Steam Client",
+    "path": "C:\\Program Files (x86)\\Steam\\steam.exe",
+    "icon": "icon_steam.png"
+  },
+  {
+    "name": "Counter-Strike: Global Offensive",
+    "path": "steam://rungameid/730",
+    "icon": "icon_csgo.png"
+  },
+  {
+    "name": "Garry's Mod",
+    "path": "steam://rungameid/4000",
+    "icon": "icon_garrysmod.png"
+  },
+  {
+    "name": "Day of Defeat",
+    "path": "steam://rungameid/30",
+    "icon": "icon_dayofdefeat.png"
+  },
+  {
+    "name": "LoL",
+    "path": "wheverever leauge is stored",
+    "icon": "icon_lol.png"
+  },
+  {
+    "name": "Joystick",
+    "path": "arcade://joystick",
+    "icon": "icon_joystick.png"
+  },
+  { "name": "CMD", "path": "C:WINDOWSsystem32cmd.exe", "icon": "console.png" }
+]
