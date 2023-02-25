@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.11)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project (arcade-gui-2 VERSION 1.0.0 LANGUAGES CXX)
+project(arcade-gui-2 VERSION 1.0.0 LANGUAGES CXX)
 
 # Add sources
 file(GLOB_RECURSE SOURCES ${CMAKE_BINARY_DIR}/src/*.cpp)
@@ -33,14 +34,19 @@ find_library(ALLEGRO_TTF_LIBRARY NAMES allegro_ttf REQUIRED)
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
 # Link Libs
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_ACODEC_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_AUDIO_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_COLOR_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_DIALOG_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_FONT_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_IMAGE_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_MAIN_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_PRIMITIVES_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_TTF_LIBRARY})
-target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${ALLEGRO_LIBRARY}
+  ${ALLEGRO_ACODEC_LIBRARY}
+  ${ALLEGRO_AUDIO_LIBRARY}
+  ${ALLEGRO_COLOR_LIBRARY}
+  ${ALLEGRO_DIALOG_LIBRARY}
+  ${ALLEGRO_FONT_LIBRARY}
+  ${ALLEGRO_IMAGE_LIBRARY}
+  ${ALLEGRO_MAIN_LIBRARY}
+  ${ALLEGRO_PRIMITIVES_LIBRARY}
+  ${ALLEGRO_TTF_LIBRARY} 
+  nlohmann_json::nlohmann_json
+)
+
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${CMAKE_BINARY_DIR}/build/assets/)

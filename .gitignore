@@ -85,4 +85,7 @@ CMakeFiles
 CMakeCache.txt
 Makefile
 render
-bin/arcade-gui-2
+build/
+compile_commands.json
+.vscode
+*.ninja*

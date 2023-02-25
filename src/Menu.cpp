@@ -76,12 +76,13 @@ void Menu::update() {
     if (games[game_focus].path == "arcade://joystick") {
       set_next_state(STATE_JOYSTICK);
     } else {
-#ifdef __unix__
-      system(games[game_focus].path);
-#elif defined(_WIN32) || defined(WIN32)
-      ShellExecute(NULL, "open", games.at(game_focus).path.c_str(), NULL, NULL,
-                   SW_SHOWDEFAULT);
-#endif
+      // #ifdef __unix__
+      //       system(games.at(game_focus).path);
+      // #elif defined(_WIN32) || defined(WIN32)
+      //       ShellExecute(NULL, "open", games.at(game_focus).path.c_str(),
+      //       NULL, NULL,
+      //                    SW_SHOWDEFAULT);
+      // #endif
     }
   }
 
