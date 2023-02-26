@@ -5,12 +5,13 @@
 #include <allegro5/allegro_primitives.h>
 
 ColorBackground::ColorBackground()
-    : color(0, 0, 0), color_direction(true, true, true) {}
+    : color(0, 0, 0), color_direction(1.0, 1.0, 1.0) {}
 
-ColorBackground::ColorBackground(ColorBackgroundPreset preset)
-    : color(preset.color),
-      color_direction(preset.color_direction),
-      overlay_image(preset.overlay_image) {}
+void ColorBackground::setPreset(ColorBackgroundPreset preset) {
+  color = preset.color;
+  color_direction = preset.color_direction;
+  overlay_image = preset.overlay_image;
+}
 
 // Change colours
 void ColorBackground::changeColors() {

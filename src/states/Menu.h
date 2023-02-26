@@ -11,6 +11,7 @@
 #include "../core/Bitmap.h"
 #include "../core/Font.h"
 #include "../globals.h"
+#include "../util/Logger.h"
 #include "../util/tools.h"
 
 // Game icons
@@ -34,24 +35,26 @@ class Menu : public GameState {
   void loadGames(const std::string& path);
 
   // Images
-  Bitmap buffer;
-  Bitmap cursor;
-  Bitmap overlay_text;
+  Bitmap cursor = Bitmap("./assets/images/cursor.png");
+  Bitmap overlay_text = Bitmap("./assets/images/overlay_text.png");
 
-  int game_focus;
-  bool hide_mouse;
+  int game_focus = 0;
+  bool hide_mouse = false;
 
   // Transition of icons
-  float icon_transition;
+  float icon_transition = 0;
 
   // Background
-  ColorBackground main_bg;
+  ColorBackground main_bg{};
 
   // Games
-  std::vector<Game> games;
+  std::vector<Game> games{};
 
   // Font
-  Font segoe;
+  Font segoe = Font("./assets/fonts/keyboard.ttf", 40);
+
+  // Logger
+  Logger logger = Logger("Menu");
 };
 
 #endif  // MENU_H_

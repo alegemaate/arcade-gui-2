@@ -20,24 +20,20 @@ const int ICON_DISTANCE = 300;
 const float ICON_TRANSITION_SPEED = 0.08;
 const float ICON_FOCUS_SCALE_MULTIPLER = 2;
 
-Menu::Menu()
-    : game_focus(0),
-      icon_transition(0),
-      cursor("./assets/images/cursor.png"),
-      overlay_text("./assets/images/overlay_text.png"),
-      segoe("./assets/fonts/keyboard.ttf", 30) {
+Menu::Menu() {
   // Setup colours
   ColorBackgroundPreset preset = {Vec3<double>(0.0, 100.0, 200.0),
                                   Vec3<double>(true, true, false),
                                   Bitmap("./assets/images/overlay.png")};
 
-  main_bg = ColorBackground(preset);
+  main_bg.setPreset(preset);
 
-  // Create buffer
-  buffer = Bitmap(SCREEN_W, SCREEN_H);
+  logger.log("Menu created");
 
   // Load games
   loadGames("./assets/games/games.json");
+
+  logger.log("Games loaded");
 }
 
 void Menu::update() {
@@ -47,7 +43,7 @@ void Menu::update() {
        KeyListener::keyPressed[ALLEGRO_KEY_ENTER]) &&
       icon_transition == 0) {
     if (games[game_focus].path == "arcade://joystick") {
-      set_next_state(ProgramState::JOYSTICK);
+      // set_next_state(StateId::JOYSTICK);
     } else {
       // #ifdef __unix__
       //       system(games.at(game_focus).path);
@@ -108,8 +104,8 @@ void Menu::draw() {
                         overlay_text.getHeight(), 0, 50, SCREEN_W,
                         overlay_text.getHeight(), 0);
 
-  al_draw_text(segoe.get(), al_map_rgb(0, 0, 0), SCREEN_W / 2, 80, 0,
-               games.at(game_focus).name.c_str());
+  al_draw_text(segoe.get(), al_map_rgb(0, 0, 0), SCREEN_W / 2, 80,
+               ALLEGRO_ALIGN_CENTRE, games.at(game_focus).name.c_str());
 
   // Draw icon (stretched if needed)
   for (int i = 0; i < games.size(); i++) {

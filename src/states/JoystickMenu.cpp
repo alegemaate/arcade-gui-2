@@ -5,20 +5,18 @@
 #include "../util/MouseListener.h"
 
 JoystickMenu::JoystickMenu() {
+  logger.log("JoystickMenu created");
+
   // Setup colours
-  ColorBackgroundPreset preset = {Vec3<double>(0.0, 100.0, 200.0),
+  ColorBackgroundPreset preset = {Vec3<double>(0.0, 10.0, 20.0),
                                   Vec3<double>(true, true, false),
                                   Bitmap("./assets/images/overlay.png")};
 
-  main_bg = ColorBackground(preset);
+  main_bg.setPreset(preset);
 
   // Minigame
   ship_x = SCREEN_W / 2;
   ship_y = SCREEN_H - 630;
-
-  // Joystick
-  joystick_background =
-      Bitmap("./assets/images/joystick/joystick_background.png");
 
   // Buttons
   for (int i = 0; i < 8; i++) {
@@ -35,13 +33,6 @@ JoystickMenu::JoystickMenu() {
         std::to_string(i + 1) + std::string(".png");
     img_joystick_positions[i] = Bitmap(file_name);
   }
-
-  joystick_background2 = Bitmap("./assets/images/joystick/background.png");
-
-  ship = Bitmap("./assets/images/joystick/ship.png");
-
-  // Gui images
-  cursor = Bitmap("./assets/images/cursor.png");
 }
 
 void JoystickMenu::update() {
@@ -61,11 +52,13 @@ void JoystickMenu::update() {
   // Hide mouse if joystick used
   if (JoystickListener::anyButtonPressed) {
     hide_mouse = true;
+    logger.log("Hiding mouse");
   }
 
   // Detect mouse motion to unhide
   if (MouseListener::mouse_moved) {
     hide_mouse = false;
+    logger.log("Showing mouse");
   }
 }
 
@@ -164,5 +157,3 @@ void JoystickMenu::draw() {
                    0);
   }
 }
-
-JoystickMenu::~JoystickMenu() {}

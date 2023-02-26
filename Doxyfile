@@ -1,0 +1,5 @@
+PROJECT_NAME           = Arcade GUI 2
+INPUT                  = ./src
+RECURSIVE              = YES
+HTML_OUTPUT            = ./docs
+GENERATE_LATEX         = NO

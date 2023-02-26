@@ -5,15 +5,6 @@
 #include "./JoystickListener.h"
 #include "./MouseListener.h"
 
-// Set next state
-void set_next_state(ProgramState newState) {
-  // If the user doesn't want to exit
-  if (nextState != ProgramState::EXIT) {
-    // Set the next state
-    nextState = newState;
-  }
-}
-
 /*
  *  ERROR REPORTING
  */

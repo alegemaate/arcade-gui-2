@@ -1,0 +1,24 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install doxygen
+        run: sudo apt-get install doxygen graphviz
+
+      - name: Generate docs
+        run: doxygen Doxyfile
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
+          single-commit: true
