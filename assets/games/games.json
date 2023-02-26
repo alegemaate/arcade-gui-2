@@ -1,7 +1,7 @@
 [
   {
     "name": "Steam Client",
-    "path": "C:\\Program Files (x86)\\Steam\\steam.exe",
+    "path": "C:/Program Files (x86)/Steam/steam.exe",
     "icon": "icon_steam.png"
   },
   {
@@ -21,7 +21,7 @@
   },
   {
     "name": "LoL",
-    "path": "C:\\Users\\Allan\\Desktop\\mame\\mame.exe gridlee.zip",
+    "path": "C:/Users/Allan/Desktop/mame/mame.exe gridlee.zip",
     "icon": "icon_lol.png"
   },
   {
@@ -29,5 +29,9 @@
     "path": "arcade://joystick",
     "icon": "icon_joystick.png"
   },
-  { "name": "CMD", "path": "C:WINDOWSsystem32cmd.exe", "icon": "console.png" }
+  {
+    "name": "CMD",
+    "path": "C:/WINDOWS/system32/cmd.exe",
+    "icon": "console.png"
+  }
 ]

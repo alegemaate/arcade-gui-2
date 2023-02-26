@@ -3,9 +3,10 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-#include "util/JoystickListener.h"
-#include "util/KeyListener.h"
-#include "util/MouseListener.h"
+#include "../util/JoystickListener.h"
+#include "../util/KeyListener.h"
+#include "../util/MouseListener.h"
+#include "../util/tools.h"
 
 #ifdef __unix__
 #include <cstdlib>
@@ -19,52 +20,24 @@ const int ICON_DISTANCE = 300;
 const float ICON_TRANSITION_SPEED = 0.08;
 const float ICON_FOCUS_SCALE_MULTIPLER = 2;
 
-// Area clicked
-bool Menu::locationClicked(int min_x, int max_x, int min_y, int max_y) {
-  return MouseListener::mouse_x >= min_x && MouseListener::mouse_x <= max_x &&
-         MouseListener::mouse_y >= min_y && MouseListener::mouse_y <= max_y &&
-         (MouseListener::mouse_button & 1 || JoystickListener::button[1]);
-}
+Menu::Menu()
+    : game_focus(0),
+      icon_transition(0),
+      cursor("./assets/images/cursor.png"),
+      overlay_text("./assets/images/overlay_text.png"),
+      segoe("./assets/fonts/keyboard.ttf", 30) {
+  // Setup colours
+  ColorBackgroundPreset preset = {Vec3<double>(0.0, 100.0, 200.0),
+                                  Vec3<double>(true, true, false),
+                                  Bitmap("./assets/images/overlay.png")};
 
-void Menu::loadGames(const std::string& path) {
-  // Open file or abort if it does not exist
-  std::ifstream file(path);
-
-  // Create buffer
-  nlohmann::json doc = nlohmann::json::parse(file);
-
-  // Reads the data in the game node, assigning it to the games[] structure
-  for (auto const& item : doc) {
-    std::string icon_path = item["icon"];
-
-    Game game;
-    game.name = item["name"];
-    game.path = item["path"];
-    game.icon = load_bitmap_ex("images/icons/" + icon_path);
-    game.w = al_get_bitmap_width(game.icon);
-    game.h = al_get_bitmap_height(game.icon);
-    games.push_back(game);
-  }
-}
-
-Menu::Menu() {
-  // Focused game
-  game_focus = 0;
-  icon_transition = 0;
+  main_bg = ColorBackground(preset);
 
   // Create buffer
-  buffer = al_create_bitmap(SCREEN_W, SCREEN_H);
-
-  // Setup colours, options are VIBRANT, GREYSCALE, PASTEL, BALANCED and a speed
-  // (1 is default)
-  main_bg = new ColorBackground("images/overlay.png", BG_BALANCED, 0.2);
+  buffer = Bitmap(SCREEN_W, SCREEN_H);
 
   // Load games
-  loadGames("games/games.json");
-
-  // Gui images
-  cursor = load_bitmap_ex("images/cursor.png");
-  overlay_text = load_bitmap_ex("images/overlay_text.png");
+  loadGames("./assets/games/games.json");
 }
 
 void Menu::update() {
@@ -74,7 +47,7 @@ void Menu::update() {
        KeyListener::keyPressed[ALLEGRO_KEY_ENTER]) &&
       icon_transition == 0) {
     if (games[game_focus].path == "arcade://joystick") {
-      set_next_state(STATE_JOYSTICK);
+      set_next_state(ProgramState::JOYSTICK);
     } else {
       // #ifdef __unix__
       //       system(games.at(game_focus).path);
@@ -114,7 +87,7 @@ void Menu::update() {
   }
 
   // Change background colour
-  main_bg->changeColors();
+  main_bg.changeColors();
 
   // Hide mouse
   if (JoystickListener::anyButtonPressed) {
@@ -128,14 +101,14 @@ void Menu::update() {
 
 void Menu::draw() {
   // Draw background
-  main_bg->draw();
+  main_bg.draw();
 
   // Title
-  al_draw_scaled_bitmap(overlay_text, 0, 0, al_get_bitmap_height(overlay_text),
-                        al_get_bitmap_height(overlay_text), 0, 50, SCREEN_W,
-                        al_get_bitmap_height(overlay_text), 0);
+  al_draw_scaled_bitmap(overlay_text.get(), 0, 0, overlay_text.getHeight(),
+                        overlay_text.getHeight(), 0, 50, SCREEN_W,
+                        overlay_text.getHeight(), 0);
 
-  al_draw_text(segoe, al_map_rgb(0, 0, 0), SCREEN_W / 2, 80, 0,
+  al_draw_text(segoe.get(), al_map_rgb(0, 0, 0), SCREEN_W / 2, 80, 0,
                games.at(game_focus).name.c_str());
 
   // Draw icon (stretched if needed)
@@ -156,15 +129,35 @@ void Menu::draw() {
     int offset_y = scale / 2;
 
     // Draw the icon
-    al_draw_scaled_bitmap(games.at(i).icon, 0, 0, games.at(i).w, games.at(i).h,
-                          icon_x - offset_x, icon_y - offset_y, scale, scale,
-                          0);
+    al_draw_scaled_bitmap(games.at(i).icon.get(), 0, 0, games.at(i).w,
+                          games.at(i).h, icon_x - offset_x, icon_y - offset_y,
+                          scale, scale, 0);
   }
 
   // When using joystick, dont show mouse
   if (!hide_mouse) {
-    al_draw_bitmap(cursor, MouseListener::mouse_x, MouseListener::mouse_y, 0);
+    al_draw_bitmap(cursor.get(), MouseListener::mouse_x, MouseListener::mouse_y,
+                   0);
   }
 }
 
-Menu::~Menu() {}
+void Menu::loadGames(const std::string& path) {
+  // Open file or abort if it does not exist
+  std::ifstream file(path);
+
+  // Create buffer
+  nlohmann::json doc = nlohmann::json::parse(file);
+
+  // Reads the data in the game node, assigning it to the games[] structure
+  for (auto const& item : doc) {
+    std::string icon_path = item["icon"];
+
+    Game game;
+    game.name = item["name"];
+    game.path = item["path"];
+    game.icon = Bitmap("./assets/images/icons/" + icon_path);
+    game.w = game.icon.getWidth();
+    game.h = game.icon.getHeight();
+    games.push_back(game);
+  }
+}

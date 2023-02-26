@@ -1,13 +1,8 @@
 #include "globals.h"
 
-// Frames
-int frames_done;
-
 // State variables
-int stateID;
-int nextState;
+ProgramState stateID = ProgramState::NONE;
+ProgramState nextState = ProgramState::NONE;
 
 int SCREEN_W = 0;
 int SCREEN_H = 0;
-
-ALLEGRO_FONT* segoe;

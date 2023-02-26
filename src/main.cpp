@@ -5,16 +5,17 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <iostream>
+#include <map>
+#include <stdexcept>
 #include <string>
 
 #include "globals.h"
-#include "tools.h"
+#include "util/tools.h"
 
-#include "GameState.h"
+#include "states/GameState.h"
 
-#include "Init.h"
-#include "JoystickMenu.h"
-#include "Menu.h"
+#include "states/JoystickMenu.h"
+#include "states/Menu.h"
 
 #include "util/JoystickListener.h"
 #include "util/KeyListener.h"
@@ -43,40 +44,43 @@ KeyListener k_listener;
 JoystickListener j_listener;
 
 // Game state object
-GameState* currentState = NULL;
+GameState* currentState = nullptr;
 
 // Change game screen
 void changeState() {
   // If the state needs to be changed
-  if (nextState != STATE_NULL) {
-    // Delete the current state
-    if (nextState != STATE_EXIT) {
-      delete currentState;
-    } else {
-      closing = true;
-    }
-
-    // Change the state
-    switch (nextState) {
-      case STATE_INIT:
-        currentState = new Init();
-        break;
-
-      case STATE_MENU:
-        currentState = new Menu();
-        break;
-
-      case STATE_JOYSTICK:
-        currentState = new JoystickMenu();
-        break;
-    }
-
-    // Change the current state ID
-    stateID = nextState;
-
-    // NULL the next state ID
-    nextState = STATE_NULL;
+  if (nextState == ProgramState::NONE) {
+    return;
   }
+
+  // Delete the current state
+  if (currentState != nullptr) {
+    delete currentState;
+  }
+
+  // Change the state
+  switch (nextState) {
+    case ProgramState::MENU:
+      currentState = new Menu();
+      break;
+
+    case ProgramState::JOYSTICK:
+      currentState = new JoystickMenu();
+      break;
+
+    case ProgramState::EXIT:
+      closing = true;
+      break;
+
+    default:
+      break;
+  }
+
+  // Change the current state ID
+  stateID = nextState;
+
+  // NULL the next state ID
+  nextState = ProgramState::NONE;
 }
 
 // Setup game
@@ -139,11 +143,6 @@ void setup() {
   joystick_enabled = (al_get_num_joysticks() > 0);
 }
 
-void clean_up() {
-  // Delete game state and free state resources
-  delete currentState;
-}
-
 void update() {
   // Event checking
   ALLEGRO_EVENT ev;
@@ -156,11 +155,17 @@ void update() {
     k_listener.update();
     j_listener.update();
 
-    // Update state
-    currentState->update();
+    try {
+      // Update state
+      currentState->update();
 
-    // Switch state if needed
-    changeState();
+      // Switch state if needed
+      changeState();
+    } catch (std::exception& e) {
+      abort_on_error(e.what());
+    } catch (...) {
+      abort_on_error("Unknown error");
+    }
   }
 
   // Exit
@@ -197,7 +202,14 @@ void update() {
     // Render a frame
     al_set_target_bitmap(buffer);
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    currentState->draw();
+
+    try {
+      currentState->draw();
+    } catch (std::exception& e) {
+      abort_on_error(e.what());
+    } catch (...) {
+      abort_on_error("Unknown error");
+    }
 
     al_set_target_backbuffer(display);
     al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -228,19 +240,12 @@ int main(int argc, char** argv) {
   // Setup basic functionality
   setup();
 
-  // Set the current state ID
-  stateID = STATE_INIT;
+  nextState = ProgramState::MENU;
+  changeState();
 
-  // Set the current game state object
-  currentState = new Init();
-
-  while (!KeyListener::key[ALLEGRO_KEY_ESCAPE] && !closing &&
-         stateID != STATE_EXIT) {
+  while (!KeyListener::key[ALLEGRO_KEY_ESCAPE] && !closing) {
     update();
   }
-
-  // Clean up
-  clean_up();
 
   return 0;
 }

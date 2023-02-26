@@ -1,79 +1,41 @@
 #include "ColorBackground.h"
 #include "globals.h"
-#include "tools.h"
+#include "util/tools.h"
 
 #include <allegro5/allegro_primitives.h>
 
-ColorBackground::ColorBackground(const std::string& overlay,
-                                 int preset_name,
-                                 double speed) {
-  overlay_image = load_bitmap_ex(overlay.c_str());
+ColorBackground::ColorBackground()
+    : color(0, 0, 0), color_direction(true, true, true) {}
 
-  background_r = 0;
-  background_g = 0;
-  background_b = 0;
-  background_r_up = false;
-  background_g_up = false;
-  background_b_up = false;
-
-  setupColors(preset_name, speed);
-}
-
-// Setup colours for background
-// For more vibrant colours, space out numbers farther e.g. 1, 125, 254
-// For more pastel colours, keep numbers close together e.g. 1, 10, 20
-void ColorBackground::setupColors(int preset_name, double newSpeed) {
-  if (preset_name == BG_VIBRANT) {
-    background_r = 1.0;
-    background_g = 166.0;
-    background_b = 77.0;
-    background_r_up = background_g_up = true;
-    background_b_up = false;
-  } else if (preset_name == BG_GRAYSCALE) {
-    background_r = 1.0;
-    background_g = 1.0;
-    background_b = 1.0;
-    background_r_up = background_g_up = background_b_up = true;
-  } else if (preset_name == BG_PASTEL) {
-    background_r = 1.0;
-    background_g = 40.0;
-    background_b = 80.0;
-    background_r_up = background_g_up = background_b_up = true;
-  } else if (preset_name == BG_BALANCED) {
-    background_r = 1.0;
-    background_g = 100.0;
-    background_b = 200.0;
-    background_r_up = background_g_up = background_b_up = true;
-  }
-  background_speed = newSpeed;
-}
+ColorBackground::ColorBackground(ColorBackgroundPreset preset)
+    : color(preset.color),
+      color_direction(preset.color_direction),
+      overlay_image(preset.overlay_image) {}
 
 // Change colours
 void ColorBackground::changeColors() {
   // If colour value increase, increase by 1, else decrease by 1
-  // When increasing,  coolbackground_r_up = true or 1, *2 -1 still equals 1
-  // When increasing, background_r_up = false or 0, *2 -1 still equals -1
-  background_r += (background_r_up * 2 - 1) * background_speed;
-  background_g += (background_g_up * 2 - 1) * background_speed;
-  background_b += (background_b_up * 2 - 1) * background_speed;
+  color +=
+      Vec3<double>(color_direction.x, color_direction.y, color_direction.z);
 
   // Start decreasing once it reaches the end
-  if (background_r >= 255 || background_r <= 0)
-    background_r_up = !background_r_up;
-  if (background_g >= 255 || background_g <= 0)
-    background_g_up = !background_g_up;
-  if (background_b >= 255 || background_b <= 0)
-    background_b_up = !background_b_up;
+  if (color.x >= 255 || color.x <= 0) {
+    color_direction.x = -color_direction.x;
+  }
+  if (color.y >= 255 || color.y <= 0) {
+    color_direction.y = -color_direction.y;
+  }
+  if (color.z >= 255 || color.z <= 0) {
+    color_direction.z = -color_direction.z;
+  }
 }
 
 void ColorBackground::draw() {
   // Background
-  al_draw_filled_rectangle(
-      0, 0, SCREEN_W, SCREEN_H,
-      al_map_rgb(background_r, background_g, background_b));
+  al_draw_filled_rectangle(0, 0, SCREEN_W, SCREEN_H,
+                           al_map_rgb(color.x, color.y, color.z));
 
   // Overlay
-  al_draw_scaled_bitmap(overlay_image, 0, 0, al_get_bitmap_width(overlay_image),
-                        al_get_bitmap_height(overlay_image), 0, 0, SCREEN_W,
-                        SCREEN_H, 0);
+  al_draw_scaled_bitmap(overlay_image.get(), 0, 0, overlay_image.getWidth(),
+                        overlay_image.getHeight(), 0, 0, SCREEN_W, SCREEN_H, 0);
 }

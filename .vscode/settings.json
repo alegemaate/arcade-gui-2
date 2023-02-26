@@ -70,6 +70,14 @@
     "numeric": "cpp",
     "valarray": "cpp",
     "iostream": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "*.tcc": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "memory_resource": "cpp",
+    "random": "cpp",
+    "numbers": "cpp",
+    "cinttypes": "cpp",
+    "codecvt": "cpp"
   }
 }

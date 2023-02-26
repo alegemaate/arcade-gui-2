@@ -7,9 +7,11 @@
 #include <string>
 #include <vector>
 
-#include "ColorBackground.h"
-#include "globals.h"
-#include "tools.h"
+#include "../ColorBackground.h"
+#include "../core/Bitmap.h"
+#include "../core/Font.h"
+#include "../globals.h"
+#include "../util/tools.h"
 
 // Game icons
 struct Game {
@@ -17,22 +19,24 @@ struct Game {
   int h;
   std::string path;
   std::string name;
-  ALLEGRO_BITMAP* icon;
+  Bitmap icon;
 };
 
 class Menu : public GameState {
  public:
   // Main loop functions
   Menu();
+
   void update();
   void draw();
-  ~Menu();
 
  private:
+  void loadGames(const std::string& path);
+
   // Images
-  ALLEGRO_BITMAP* buffer;
-  ALLEGRO_BITMAP* cursor;
-  ALLEGRO_BITMAP* overlay_text;
+  Bitmap buffer;
+  Bitmap cursor;
+  Bitmap overlay_text;
 
   int game_focus;
   bool hide_mouse;
@@ -40,14 +44,14 @@ class Menu : public GameState {
   // Transition of icons
   float icon_transition;
 
-  bool locationClicked(int min_x, int max_x, int min_y, int max_y);
-  void loadGames(const std::string& path);
-
   // Background
-  ColorBackground* main_bg;
+  ColorBackground main_bg;
 
   // Games
   std::vector<Game> games;
+
+  // Font
+  Font segoe;
 };
 
 #endif  // MENU_H_

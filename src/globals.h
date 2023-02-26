@@ -5,24 +5,17 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_ttf.h>
 
-// Game states
-enum GameStates {
-  STATE_NULL,
-  STATE_INIT,
-  STATE_MENU,
-  STATE_JOYSTICK,
-  STATE_EXIT,
+// Program states
+enum class ProgramState {
+  NONE,
+  MENU,
+  JOYSTICK,
+  EXIT,
 };
 
-// Frames
-extern int frames_done;
-
 // State variables
-extern int stateID;
-extern int nextState;
-
-// Font
-extern ALLEGRO_FONT* segoe;
+extern ProgramState stateID;
+extern ProgramState nextState;
 
 // Screen size
 extern int SCREEN_W;
