@@ -1,0 +1,5 @@
+<map id="LoaderPlugin" name="LoaderPlugin">
+<area shape="rect" id="node1" title="Loader Plugin Interface." alt="" coords="58,5,165,32"/>
+<area shape="rect" id="node2" href="$classFileLoader.html" title="File Loader Plugin." alt="" coords="5,80,95,107"/>
+<area shape="rect" id="node3" href="$classMameLoader.html" title="Mame Loader Plugin." alt="" coords="119,80,226,107"/>
+</map>

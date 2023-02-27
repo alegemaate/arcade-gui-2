@@ -1,0 +1,5 @@
+<map id="ColorBackgroundPreset" name="ColorBackgroundPreset">
+<area shape="rect" id="node1" title=" " alt="" coords="45,109,220,136"/>
+<area shape="rect" id="node2" href="$classVec3.html" title=" " alt="" coords="5,5,132,32"/>
+<area shape="rect" id="node3" href="$classBitmap.html" title="A wrapper around ALLEGRO_BITMAP." alt="" coords="162,5,231,32"/>
+</map>
