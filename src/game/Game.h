@@ -8,11 +8,11 @@
  *
  */
 struct Game {
-  /// @brief Path to game
-  std::string path;
-
   /// @brief Name of game
   std::string name;
+
+  /// @brief Path to game
+  std::string path;
 
   /// @brief Icon of game
   Bitmap icon;

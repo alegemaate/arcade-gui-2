@@ -10,7 +10,6 @@
 #include "../ColorBackground.h"
 #include "../core/Bitmap.h"
 #include "../globals.h"
-#include "../util/Logger.h"
 #include "../util/tools.h"
 
 class JoystickMenu : public GameState {
@@ -39,9 +38,6 @@ class JoystickMenu : public GameState {
   bool hide_mouse = false;
 
   ColorBackground main_bg = ColorBackground();
-
-  // Logger
-  Logger logger = Logger("JoystickMenu");
 };
 
 #endif  // JOYSTICKMENU_H_

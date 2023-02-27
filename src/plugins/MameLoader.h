@@ -68,17 +68,11 @@ class MameLoader : public LoaderPlugin {
       }
 
       // Remove "romset " and " is good" to get game id
-      std::string rom_name = line;
-      rom_name = rom_name.substr(7, rom_name.length());
-      rom_name = rom_name.substr(0, rom_name.find(" "));
+      std::string rom_name = line.substr(7, line.find(" ", 7) - 7);
 
-      logger.log("Found rom: " + rom_name);
-
-      Game game;
-      game.name = rom_name;
-      game.path = "mame " + rom_name;
-      game.icon = Bitmap("assets/images/icons/icon_mame.png");
-      games.push_back(game);
+      games.push_back({.name = rom_name,
+                       .path = "mame " + rom_name,
+                       .icon = Bitmap("assets/images/icons/icon_mame.png")});
     }
 
     rom_file.close();

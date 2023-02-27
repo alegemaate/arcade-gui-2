@@ -7,8 +7,6 @@
 #include "StateId.h"
 
 JoystickMenu::JoystickMenu() {
-  logger.log("JoystickMenu created");
-
   // Setup colours
   ColorBackgroundPreset preset = {Vec3<double>(0.0, 10.0, 20.0),
                                   Vec3<double>(true, true, false),
@@ -54,13 +52,11 @@ void JoystickMenu::update() {
   // Hide mouse if joystick used
   if (JoystickListener::anyButtonPressed) {
     hide_mouse = true;
-    logger.log("Hiding mouse");
   }
 
   // Detect mouse motion to unhide
   if (MouseListener::mouse_moved) {
     hide_mouse = false;
-    logger.log("Showing mouse");
   }
 
   if (KeyListener::key[ALLEGRO_KEY_ESCAPE]) {

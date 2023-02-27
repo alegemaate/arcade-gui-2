@@ -30,8 +30,6 @@ Menu::Menu() {
 
   main_bg.setPreset(preset);
 
-  logger.log("Menu created");
-
   // Load games
   directory.loadPlugin(std::make_shared<MameLoader>());
   directory.loadPlugin(std::make_shared<FileLoader>());

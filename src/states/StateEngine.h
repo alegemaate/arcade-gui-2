@@ -8,6 +8,7 @@
 #include "GameState.h"
 #include "StateId.h"
 
+#include "../util/Logger.h"
 #include "../util/tools.h"
 
 #include "./JoystickMenu.h"
@@ -58,14 +59,17 @@ class StateEngine {
     // Change the state
     switch (nextStateId) {
       case StateId::MENU:
+        logger.log("Changing state to Menu");
         state = std::make_unique<Menu>();
         break;
 
       case StateId::JOYSTICK:
+        logger.log("Changing state to JoystickMenu");
         state = std::make_unique<JoystickMenu>();
         break;
 
       case StateId::EXIT:
+        logger.log("Exiting");
         closing = true;
         break;
 
@@ -86,4 +90,6 @@ class StateEngine {
   std::unique_ptr<GameState> state;
 
   bool closing = false;
+
+  Logger logger = Logger("StateEngine");
 };
