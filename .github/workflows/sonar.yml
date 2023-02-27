@@ -19,7 +19,9 @@ jobs:
 
       - uses: SonarSource/sonarcloud-github-c-cpp@v1
 
-      - run: |
+      - name: Build
+        run: |
+          sudo apt install liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev liballegro-image5-dev liballegro-dialog5-dev liballegro-ttf5-dev nlohmann-json3-dev
           mkdir build
           cmake -S . -B build
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
