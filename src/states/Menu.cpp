@@ -1,18 +1,20 @@
 #include "Menu.h"
 
 #include <fstream>
-#include <nlohmann/json.hpp>
-
-#include "../util/JoystickListener.h"
-#include "../util/KeyListener.h"
-#include "../util/MouseListener.h"
-#include "../util/tools.h"
+#include <memory>
 
 #ifdef __unix__
 #include <cstdlib>
 #elif defined(_WIN32) || defined(WIN32)
 #include <shlwapi.h>
 #endif
+
+#include "../util/JoystickListener.h"
+#include "../util/KeyListener.h"
+#include "../util/MouseListener.h"
+#include "../util/tools.h"
+
+#include "StateId.h"
 
 // Scale of icon in focus
 const int ICON_SCALE = 200;
@@ -31,27 +33,29 @@ Menu::Menu() {
   logger.log("Menu created");
 
   // Load games
-  loadGames("./assets/games/games.json");
-
-  logger.log("Games loaded");
+  directory.loadPlugin(std::make_shared<MameLoader>());
+  directory.loadPlugin(std::make_shared<FileLoader>());
 }
 
 void Menu::update() {
+  auto focused_game = directory.listGames().at(game_focus);
+
   // Joystick APP
   if ((locationClicked(442, 837, 322, 717) ||
        JoystickListener::buttonPressed[2] ||
        KeyListener::keyPressed[ALLEGRO_KEY_ENTER]) &&
       icon_transition == 0) {
-    if (games[game_focus].path == "arcade://joystick") {
-      // set_next_state(StateId::JOYSTICK);
+    if (focused_game.path == "arcade://joystick") {
+      changeState(StateId::JOYSTICK);
     } else {
-      // #ifdef __unix__
-      //       system(games.at(game_focus).path);
-      // #elif defined(_WIN32) || defined(WIN32)
-      //       ShellExecute(NULL, "open", games.at(game_focus).path.c_str(),
-      //       NULL, NULL,
-      //                    SW_SHOWDEFAULT);
-      // #endif
+      logger.log("Launching game: " + focused_game.name);
+#ifdef __unix__
+      auto status = system(focused_game.path.c_str());
+      logger.log("Game exited with status: " + std::to_string(status));
+#elif defined(_WIN32) || defined(WIN32)
+      ShellExecute(NULL, "open", focused_game.path.c_str(), NULL, NULL,
+                   SW_SHOWDEFAULT);
+#endif
     }
   }
 
@@ -66,7 +70,7 @@ void Menu::update() {
   // Scroll Right
   if ((locationClicked(SCREEN_W - SCREEN_W / 4, SCREEN_W, 0, SCREEN_H) ||
        JoystickListener::stick[0] || KeyListener::key[ALLEGRO_KEY_RIGHT]) &&
-      icon_transition == 0 && game_focus < games.size() - 1) {
+      icon_transition == 0 && game_focus < directory.listGames().size() - 1) {
     game_focus++;
     icon_transition = 1;
   }
@@ -93,6 +97,10 @@ void Menu::update() {
   if (MouseListener::mouse_moved) {
     hide_mouse = false;
   }
+
+  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
+    changeState(StateId::EXIT);
+  }
 }
 
 void Menu::draw() {
@@ -105,10 +113,11 @@ void Menu::draw() {
                         overlay_text.getHeight(), 0);
 
   al_draw_text(segoe.get(), al_map_rgb(0, 0, 0), SCREEN_W / 2, 80,
-               ALLEGRO_ALIGN_CENTRE, games.at(game_focus).name.c_str());
+               ALLEGRO_ALIGN_CENTRE,
+               directory.listGames().at(game_focus).name.c_str());
 
   // Draw icon (stretched if needed)
-  for (int i = 0; i < games.size(); i++) {
+  for (int i = 0; i < directory.listGames().size(); i++) {
     // Initial scale is original
     int scale = ICON_SCALE;
 
@@ -125,35 +134,16 @@ void Menu::draw() {
     int offset_y = scale / 2;
 
     // Draw the icon
-    al_draw_scaled_bitmap(games.at(i).icon.get(), 0, 0, games.at(i).w,
-                          games.at(i).h, icon_x - offset_x, icon_y - offset_y,
-                          scale, scale, 0);
+    al_draw_scaled_bitmap(directory.listGames().at(i).icon.get(), 0, 0,
+                          directory.listGames().at(i).icon.getWidth(),
+                          directory.listGames().at(i).icon.getHeight(),
+                          icon_x - offset_x, icon_y - offset_y, scale, scale,
+                          0);
   }
 
   // When using joystick, dont show mouse
   if (!hide_mouse) {
     al_draw_bitmap(cursor.get(), MouseListener::mouse_x, MouseListener::mouse_y,
                    0);
-  }
-}
-
-void Menu::loadGames(const std::string& path) {
-  // Open file or abort if it does not exist
-  std::ifstream file(path);
-
-  // Create buffer
-  nlohmann::json doc = nlohmann::json::parse(file);
-
-  // Reads the data in the game node, assigning it to the games[] structure
-  for (auto const& item : doc) {
-    std::string icon_path = item["icon"];
-
-    Game game;
-    game.name = item["name"];
-    game.path = item["path"];
-    game.icon = Bitmap("./assets/images/icons/" + icon_path);
-    game.w = game.icon.getWidth();
-    game.h = game.icon.getHeight();
-    games.push_back(game);
   }
 }

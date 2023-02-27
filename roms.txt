@@ -1,0 +1,284 @@
+romset 1292apvs is best available
+romset 1392apvs [1292apvs] is best available
+4d30        : ip14prom.bin (524288 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset 4d30 is best available
+romset a2600 is best available
+romset a2600p [a2600] is best available
+romset advsnha [arcadia] is best available
+alfaskop4101: alfaskop4101.bin (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset alfaskop4101 is best available
+alfaskop4120: alfaskop4120.bin (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset alfaskop4120 is best available
+romset apexc is best available
+romset arb is best available
+romset arcadia is best available
+bdesignm    : h8_328.bin (24576 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset bdesignm is best available
+beena       : beenabios.bin (524288 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset beena is best available
+romset bndarc [arcadia] is best available
+romset breakout is best available
+romset casiorom is best available
+romset copera is best available
+romset cpc464p is best available
+romset cpc6128p is best available
+romset cx3000tc [vc4000] is best available
+romset database is best available
+romset dcebridge is best available
+romset dendy [iq501] is best available
+romset dendy2 [iq502] is best available
+digdug      : 51xx.bin (1024 bytes) - NOT FOUND (namco51)
+digdug      : 53xx.bin (1024 bytes) - NOT FOUND (namco53)
+romset digdug is bad
+romset digiblst is best available
+romset dynavisn [intmpt03] is best available
+romset ekusera [intmpt03] is best available
+romset elf2 is best available
+romset f1392 [1292apvs] is best available
+romset famicom is best available
+romset famicomo [famicom] is best available
+fccpu30lite4: rom.bin (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset fccpu30lite4 [fccpu30] is best available
+fccpu30lite8: rom.bin (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset fccpu30lite8 [fccpu30] is best available
+fccpu30senr : rom.bin (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset fccpu30senr is best available
+fccpu30senr501: rom.bin (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset fccpu30senr501 is best available
+romset fforce2 [1292apvs] is best available
+romset fscc6 is best available
+romset galaga is good
+romset gchinatv is best available
+romset gen_nomd is best available
+romset genesis is best available
+romset ggm is best available
+romset giglnrdo [arcadia] is best available
+grid1109    : 1109even.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+grid1109    : 1109odd.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset grid1109 [grid1101] is best available
+grid1121    : 1121even.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+grid1121    : 1121odd.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset grid1121 is best available
+grid1131    : 1131even.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+grid1131    : 1131odd.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset grid1131 [grid1121] is best available
+romset gx4000 is best available
+romset h21 is best available
+romset hanihac [arcadia] is best available
+romset hmg1292 [1292apvs] is best available
+romset hmg1392 [1292apvs] is best available
+romset hmg2650 [arcadia] is best available
+romset icanguit is best available
+romset icanpian is best available
+romset intel02 is best available
+romset intervsn [ormatu] is best available
+romset intmpt03 is best available
+romset iq501 is best available
+romset iq502 is best available
+romset isbc660 is best available
+romset itmcmtp3 [intmpt03] is best available
+romset ixl2000 [arcadia] is best available
+romset krvnjvtv is best available
+leapexpr    : internal.rom (1048576 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset leapexpr is best available
+romset lk3000 is best available
+romset lnsy1392 [1292apvs] is best available
+romset lvision [arcadia] is best available
+mac2bios    : macs2os_l.bin (524288 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+mac2bios    : macs2os_h.bin (524288 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mac2bios is best available
+romset megadrij [genesis] is best available
+romset megadriv [genesis] is best available
+romset megaduck is best available
+romset megajet [gen_nomd] is best available
+romset microvsn is best available
+romset mpt05 is best available
+romset mpu1000 [1292apvs] is best available
+romset mpu2000 [1292apvs] is best available
+romset mratlus [plldium] is best available
+romset myvision is best available
+romset nes is best available
+romset nespal [nes] is best available
+romset oc2000 [krvnjvtv] is best available
+romset orbituvi is best available
+romset ormatu is best available
+osc1000b    : mmi6341-1.ic2 (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+osc1000b    : mmi6349.5d (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+osc1000b    : mmi6349.5c (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset osc1000b [tmc1800] is best available
+romset pacman [puckman] is good
+romset palestra is best available
+romset pasogo is best available
+pc8401a     : pc8401a.bin (98304 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+pc8401a     : pc8441a.bin (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+pc8401a     : sed1330.bin (1472 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset pc8401a is best available
+romset pce is best available
+romset pdp1 is best available
+pi_stry     : internal.mcu.rom (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset pi_stry is best available
+pi_stry2    : internal.mcu.rom (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset pi_stry2 is best available
+romset pico is best available
+romset picoj [pico] is best available
+romset picou [pico] is best available
+romset plldium is best available
+romset pockchal is best available
+romset polyvcg [plldium] is best available
+romset pong is best available
+romset pongd is best available
+romset poppympt [intmpt03] is best available
+romset pp1292 [1292apvs] is best available
+romset pp1392 [1292apvs] is best available
+romset prestmpt [intmpt03] is best available
+romset pv1000 is best available
+romset rc2014bp5 [rc2014] is best available
+romset rc2014bp8 [rc2014] is best available
+romset rc2014bppro [rc2014] is best available
+romset rebound is best available
+recel       : a2362.b2 (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+recel       : a2361.b1 (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset recel is best available
+romset rlndtnsc1 is best available
+romset rowtrn2k [intmpt03] is best available
+romset rwtrntcs is best available
+romset sag is best available
+romset sawatte is best available
+romset sb486 is best available
+romset sc105 [rc2014] is best available
+romset sc112 [rc2014] is best available
+romset sc116 [rc2014] is best available
+romset sc133 [rc2014] is best available
+romset sc3000 is best available
+romset sc3000h [sc3000] is best available
+romset sg1000 is best available
+romset sg1000m2 [sg1000] is best available
+romset sg1000m3 [sms] is best available
+romset sgx [pce] is best available
+romset sheenhvc [ormatu] is best available
+romset smartvad is best available
+romset soundic [intmpt03] is best available
+romset spc4000 [vc4000] is best available
+romset ssem is best available
+romset sstarkar is best available
+romset supracan is best available
+romset sv8000 is best available
+romset svision is best available
+romset svisionn [svision] is best available
+romset svisionp [svision] is best available
+romset svisions [svision] is best available
+romset tbbympt3 [intmpt03] is best available
+romset tccosmos [arcadia] is best available
+romset telefevr [arcadia] is best available
+romset telestry is best available
+romset telngtcs [rwtrntcs] is best available
+romset tempestm [intmpt03] is best available
+test410     : rom_41x.bin (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset test410 is best available
+romset tg16 [pce] is best available
+tmc1800     : mmi6341-1.ic2 (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset tmc1800 is best available
+tmc2000e    : 1 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+tmc2000e    : 2 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+tmc2000e    : 3 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+tmc2000e    : 4 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset tmc2000e is best available
+romset tp1983 is best available
+romset tp1985 is best available
+romset trakcvg [plldium] is best available
+romset tryomvgc [intmpt03] is best available
+romset tunixha [arcadia] is best available
+romset tvc4000 [vc4000] is best available
+romset tvg2000 [arcadia] is best available
+romset tvgogo is best available
+romset tvlinkp [svision] is best available
+romset tx0_64kw [tx0_8kw] is best available
+romset tx0_8kw is best available
+romset tx0_8kwo [tx0_8kw] is best available
+romset uzebox is best available
+romset vboy is best available
+romset vc4000 is best available
+romset vc6000 [1292apvs] is best available
+romset vdmaster [orbituvi] is best available
+vic10       : 6703.u4 (256 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset vic10 is best available
+romset vmdtbase [database] is best available
+vz200de     : vtechv11.u09 (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+vz200de     : vtechv11.u10 (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset vz200de [laser200] is best available
+romset z80clock is best available
+tandy2kb    : keyboard.m1 (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset tandy2kb is best available
+aprikb      : keyboard controller upd7507c.ic2 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset aprikb is best available
+namco56     : 56xx.bin (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset namco56 is best available
+namco58     : 58xx.bin (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset namco58 is best available
+namco59     : 59xx.bin (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset namco59 is best available
+v1050kb     : 20-08049-410.z5 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+v1050kb     : 22-02716-074.z8 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset v1050kb is best available
+abc80kb     : 053.z5 (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset abc80kb is best available
+mbc55x_kbd  : d8049hc.m1 (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mbc55x_kbd is best available
+a2lancegs   : lancegs.nv (512 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset a2lancegs is best available
+adam_ide    : exp.rom (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset adam_ide is best available
+pc9801_118  : 118 e316.1e (131072 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset pc9801_118 is best available
+kc_d004     : d004v20.bin (8192 bytes) - NOT FOUND BUT OPTIONAL
+romset kc_d004 is best available
+kb_pc83     : 8048.u1 (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset kb_pc83 is best available
+plus4_sid   : gal16v8 (256 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset plus4_sid is best available
+s100_mm65k16s: 82s100.6c (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+s100_mm65k16s: pal14l4.6d (16 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+s100_mm65k16s: pal16l2.16d (16 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset s100_mm65k16s is best available
+sa1403d     : i (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : ii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iv (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : i (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : ii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iv (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : i (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : ii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iii (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+sa1403d     : iv (4096 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset sa1403d is best available
+m68hc705c4a : bootstrap.bin (240 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset m68hc705c4a is best available
+m68hc705c8a : bootstrap.bin (240 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset m68hc705c8a is best available
+ldp1000     : ldp1000_bios.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset ldp1000 is best available
+ldp1450     : ldp1450_bios.bin (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset ldp1450 is best available
+qs1000      : qs1000.bin (65536 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset qs1000 is best available
+crt9028_000 : crt9028_000.bin (1024 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset crt9028_000 is best available
+hd63484     : hd63484.bin (256 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset hd63484 is best available
+mb90082     : mb90082_char.bin (2048 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mb90082 is best available
+sed1330     : sed1330.bin (1472 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset sed1330 is best available
+arc_scsi_a500: blank.rom (8192 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset arc_scsi_a500 is best available
+mpcb849     : mpcb849a.bin (32 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mpcb849 is best available
+mpcb030     : mpcb030a.bin (32 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mpcb030 is best available
+mpcba63     : mpcba63b.bin (32 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset mpcba63 is best available
+wangpc_tig  : 377-3072.l26 (256 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+wangpc_tig  : 377-3073.l16 (256 bytes) - NOT FOUND - NO GOOD DUMP KNOWN
+romset wangpc_tig is best available

@@ -6,25 +6,27 @@
 #include <vector>
 
 #include "GameState.h"
+#include "StateId.h"
 
 #include "../util/tools.h"
 
 #include "./JoystickMenu.h"
 #include "./Menu.h"
 
-enum class StateId {
-  NONE,
-  MENU,
-  JOYSTICK,
-  EXIT,
-};
-
 class StateEngine {
  public:
   void update() {
     try {
       changeState();
+
       state.get()->update();
+
+      auto next_state = state.get()->getNextStateId();
+
+      if (next_state != StateId::NONE) {
+        setState(next_state);
+      }
+
     } catch (std::exception& e) {
       abort_on_error(e.what());
     } catch (...) {

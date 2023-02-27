@@ -1,5 +1,6 @@
-#ifndef GAMESTATE_H_
-#define GAMESTATE_H_
+#pragma once
+
+#include "StateId.h"
 
 // GameState, holds all levels
 class GameState {
@@ -7,6 +8,12 @@ class GameState {
   virtual void update() = 0;
   virtual void draw() = 0;
   virtual ~GameState() {}
-};
 
-#endif  // GAMESTATE_H_
+  StateId getNextStateId() const { return nextStateId; }
+
+ protected:
+  void changeState(const StateId stateId) { nextStateId = stateId; }
+
+ private:
+  StateId nextStateId = StateId::NONE;
+};

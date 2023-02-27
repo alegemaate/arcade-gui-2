@@ -4,6 +4,8 @@
 #include "../util/KeyListener.h"
 #include "../util/MouseListener.h"
 
+#include "StateId.h"
+
 JoystickMenu::JoystickMenu() {
   logger.log("JoystickMenu created");
 
@@ -59,6 +61,10 @@ void JoystickMenu::update() {
   if (MouseListener::mouse_moved) {
     hide_mouse = false;
     logger.log("Showing mouse");
+  }
+
+  if (KeyListener::key[ALLEGRO_KEY_ESCAPE]) {
+    changeState(StateId::MENU);
   }
 }
 

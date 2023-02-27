@@ -1,10 +1,6 @@
 #pragma once
 
-#include <time.h>
 #include <string>
-
-// Random number generator. Use int random(highest,lowest);
-extern int random(int newLowest, int newHighest);
 
 // Error reporting
 extern void abort_on_error(const std::string& message);

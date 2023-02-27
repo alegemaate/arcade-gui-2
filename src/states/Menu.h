@@ -10,18 +10,12 @@
 #include "../ColorBackground.h"
 #include "../core/Bitmap.h"
 #include "../core/Font.h"
+#include "../game/GameDirectory.h"
 #include "../globals.h"
+#include "../plugins/FileLoader.h"
+#include "../plugins/MameLoader.h"
 #include "../util/Logger.h"
 #include "../util/tools.h"
-
-// Game icons
-struct Game {
-  int w;
-  int h;
-  std::string path;
-  std::string name;
-  Bitmap icon;
-};
 
 class Menu : public GameState {
  public:
@@ -32,8 +26,6 @@ class Menu : public GameState {
   void draw();
 
  private:
-  void loadGames(const std::string& path);
-
   // Images
   Bitmap cursor = Bitmap("./assets/images/cursor.png");
   Bitmap overlay_text = Bitmap("./assets/images/overlay_text.png");
@@ -47,14 +39,14 @@ class Menu : public GameState {
   // Background
   ColorBackground main_bg{};
 
-  // Games
-  std::vector<Game> games{};
-
   // Font
   Font segoe = Font("./assets/fonts/keyboard.ttf", 40);
 
   // Logger
   Logger logger = Logger("Menu");
+
+  // Mame adapter
+  GameDirectory directory;
 };
 
 #endif  // MENU_H_

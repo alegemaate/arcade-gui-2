@@ -112,7 +112,10 @@ void setupDisplay() {
   SCREEN_W = (info.x2 - info.x1);
   SCREEN_H = (info.y2 - info.y1);
 
-  al_set_new_display_flags(ALLEGRO_WINDOWED);
+  al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+  al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
+  al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+  al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
   display = al_create_display(SCREEN_W, SCREEN_H);
 
   if (!display) {
