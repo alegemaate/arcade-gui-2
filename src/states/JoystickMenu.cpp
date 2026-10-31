@@ -1,66 +1,162 @@
 #include "JoystickMenu.h"
 
-#include "../util/JoystickListener.h"
-#include "../util/KeyListener.h"
-#include "../util/MouseListener.h"
+#include <string>
 
-#include "StateId.h"
+#include "../Controls.h"
+#include "../globals.h"
 
-JoystickMenu::JoystickMenu() {
-  // Setup colours
-  ColorBackgroundPreset preset = {Vec3<double>(0.0, 10.0, 20.0),
-                                  Vec3<double>(true, true, false),
-                                  Bitmap("./assets/images/overlay.png")};
+namespace {
+using asw::input::ControllerButton;
+using asw::input::Key;
 
-  main_bg.setPreset(preset);
+// Ship speed in pixels per second
+constexpr float SHIP_SPEED = 120.0F;
+
+// Ship stays within this distance of the screen centre
+constexpr float SHIP_RANGE = 298.0F;
+
+// Offset of the stick images from the bottom centre of the screen
+constexpr float STICK_X = -306.0F;
+constexpr float STICK_Y = -553.0F;
+
+// A cabinet button, lit when its key or controller button is down
+struct CabinetButton {
+  Key key;
+  ControllerButton button;
+
+  // Offset from the bottom centre of the screen
+  float x;
+  float y;
+};
+
+const std::array<CabinetButton, 8> BUTTONS = {
+    {
+        {.key = Key::Num1, .button = ControllerButton::A, .x = -78, .y = -424},
+        {.key = Key::Num2, .button = ControllerButton::B, .x = 30, .y = -440},
+        {.key = Key::Num3, .button = ControllerButton::X, .x = 135, .y = -427},
+        {.key = Key::Num4, .button = ControllerButton::Y, .x = -81, .y = -491},
+        {
+            .key = Key::Num5,
+            .button = ControllerButton::RightShoulder,
+            .x = 20,
+            .y = -513,
+        },
+        {
+            .key = Key::Num6,
+            .button = ControllerButton::LeftShoulder,
+            .x = 122,
+            .y = -492,
+        },
+        {
+            .key = Key::Num7,
+            .button = ControllerButton::Back,
+            .x = 181,
+            .y = -551,
+        },
+        {
+            .key = Key::Num8,
+            .button = ControllerButton::Start,
+            .x = 251,
+            .y = -546,
+        },
+    },
+};
+
+bool button_down(const CabinetButton& button) {
+  return asw::input::get_key(button.key) ||
+         asw::input::get_controller_button(asw::input::ANY_CONTROLLER,
+                                           button.button);
+}
+
+// Image index for the direction held, -1 when centred. Starts at up left and
+// goes clockwise.
+int stick_direction() {
+  const bool up = asw::input::get_action(controls::UI_UP);
+  const bool down = asw::input::get_action(controls::UI_DOWN);
+  const bool left = asw::input::get_action(controls::UI_LEFT);
+  const bool right = asw::input::get_action(controls::UI_RIGHT);
+
+  if (up && left) {
+    return 0;
+  }
+  if (up && right) {
+    return 2;
+  }
+  if (down && right) {
+    return 4;
+  }
+  if (down && left) {
+    return 6;
+  }
+  if (up) {
+    return 1;
+  }
+  if (right) {
+    return 3;
+  }
+  if (down) {
+    return 5;
+  }
+  if (left) {
+    return 7;
+  }
+  return -1;
+}
+}  // namespace
+
+void JoystickMenu::init() {
+  cursor = asw::assets::load_texture("assets/images/cursor.png");
+  joystick_background = asw::assets::load_texture(
+      "assets/images/joystick/joystick_background.png");
+  ship = asw::assets::load_texture("assets/images/joystick/ship.png");
+  joystick_background2 =
+      asw::assets::load_texture("assets/images/joystick/background.png");
+
+  main_bg.setPreset({
+      .color = asw::Vec3f(0.0F, 10.0F, 20.0F),
+      .color_direction = asw::Vec3f(1.0F, 1.0F, 0.0F),
+      .overlay_image = asw::assets::load_texture("assets/images/overlay.png"),
+  });
 
   // Minigame
-  ship_x = SCREEN_W / 2;
-  ship_y = SCREEN_H - 630;
+  ship_position = asw::Vec2f(SCREEN_W / 2, SCREEN_H - 630);
 
-  // Buttons
-  for (int i = 0; i < 8; i++) {
-    std::string file_name =
-        std::string("./assets/images/joystick/joystick_button_") +
-        std::to_string(i + 1) + std::string(".png");
-    img_joystick_button[i] = Bitmap(file_name);
-  }
-
-  // Positions
-  for (int i = 0; i < 8; i++) {
-    std::string file_name =
-        std::string("./assets/images/joystick/joystick_pos_") +
-        std::to_string(i + 1) + std::string(".png");
-    img_joystick_positions[i] = Bitmap(file_name);
+  for (int i = 0; i < BUTTON_COUNT; i++) {
+    const auto number = std::to_string(i + 1);
+    img_joystick_button.at(i) = asw::assets::load_texture(
+        "assets/images/joystick/joystick_button_" + number + ".png");
+    img_joystick_positions.at(i) = asw::assets::load_texture(
+        "assets/images/joystick/joystick_pos_" + number + ".png");
   }
 }
 
-void JoystickMenu::update() {
+void JoystickMenu::update(float dt) {
+  const float ship_width = asw::util::get_texture_size(ship).x;
+  const float step = SHIP_SPEED * dt;
+
   // Move ship in minigame
-  if ((JoystickListener::stick[0] || KeyListener::key[ALLEGRO_KEY_LEFT]) &&
-      (ship_x > (SCREEN_W / 2 - 298))) {
-    ship_x -= 2;
-  } else if ((JoystickListener::stick[0] ||
-              KeyListener::key[ALLEGRO_KEY_RIGHT]) &&
-             (ship_x < (SCREEN_W / 2 + 298 - ship.getWidth()))) {
-    ship_x += 2;
+  if (asw::input::get_action(controls::UI_LEFT) &&
+      ship_position.x > (SCREEN_W / 2) - SHIP_RANGE) {
+    ship_position.x -= step;
+  } else if (asw::input::get_action(controls::UI_RIGHT) &&
+             ship_position.x < (SCREEN_W / 2) + SHIP_RANGE - ship_width) {
+    ship_position.x += step;
   }
 
   // Change background colour
-  main_bg.changeColors();
+  main_bg.changeColors(dt);
 
-  // Hide mouse if joystick used
-  if (JoystickListener::anyButtonPressed) {
-    hide_mouse = true;
+  if (asw::input::get_action_down(controls::UI_BACK)) {
+    manager.set_next_scene(StateId::Menu);
   }
+}
 
-  // Detect mouse motion to unhide
-  if (MouseListener::mouse_moved) {
-    hide_mouse = false;
-  }
+void JoystickMenu::drawStick() const {
+  const int direction = stick_direction();
 
-  if (KeyListener::key[ALLEGRO_KEY_ESCAPE]) {
-    changeState(StateId::MENU);
+  if (direction >= 0) {
+    asw::draw::sprite(img_joystick_positions.at(direction),
+                      asw::Vec2f((SCREEN_W / 2) + STICK_X, SCREEN_H + STICK_Y));
   }
 }
 
@@ -68,94 +164,35 @@ void JoystickMenu::draw() {
   // Draw background
   main_bg.draw();
 
-  // Background
-  al_draw_bitmap(joystick_background2.get(),
-                 SCREEN_W / 2 - (joystick_background2.getWidth() / 2),
-                 SCREEN_H - (joystick_background.getHeight() +
-                             joystick_background2.getHeight()),
-                 0);
-  al_draw_bitmap(joystick_background.get(),
-                 SCREEN_W / 2 - (joystick_background.getWidth() / 2),
-                 SCREEN_H - (joystick_background.getHeight()), 0);
+  // Cabinet
+  const auto panel_size = asw::util::get_texture_size(joystick_background);
+  const auto screen_size = asw::util::get_texture_size(joystick_background2);
+
+  asw::draw::sprite(joystick_background2,
+                    asw::Vec2f((SCREEN_W / 2) - (screen_size.x / 2),
+                               SCREEN_H - (panel_size.y + screen_size.y)));
+  asw::draw::sprite(
+      joystick_background,
+      asw::Vec2f((SCREEN_W / 2) - (panel_size.x / 2), SCREEN_H - panel_size.y));
 
   // Buttons
-  if (JoystickListener::button[0] || KeyListener::key[ALLEGRO_KEY_1]) {
-    al_draw_bitmap(img_joystick_button[0].get(), SCREEN_W / 2 - 78,
-                   SCREEN_H - 424, 0);
-  }
-  if (JoystickListener::button[1] || KeyListener::key[ALLEGRO_KEY_2]) {
-    al_draw_bitmap(img_joystick_button[1].get(), SCREEN_W / 2 + 30,
-                   SCREEN_H - 440, 0);
-  }
-  if (JoystickListener::button[2] || KeyListener::key[ALLEGRO_KEY_3]) {
-    al_draw_bitmap(img_joystick_button[2].get(), SCREEN_W / 2 + 135,
-                   SCREEN_H - 427, 0);
-  }
-  if (JoystickListener::button[3] || KeyListener::key[ALLEGRO_KEY_4]) {
-    al_draw_bitmap(img_joystick_button[3].get(), SCREEN_W / 2 - 81,
-                   SCREEN_H - 491, 0);
-  }
-  if (JoystickListener::button[4] || KeyListener::key[ALLEGRO_KEY_5]) {
-    al_draw_bitmap(img_joystick_button[4].get(), SCREEN_W / 2 + 20,
-                   SCREEN_H - 513, 0);
-  }
-  if (JoystickListener::button[5] || KeyListener::key[ALLEGRO_KEY_6]) {
-    al_draw_bitmap(img_joystick_button[5].get(), SCREEN_W / 2 + 122,
-                   SCREEN_H - 492, 0);
-  }
-  if (JoystickListener::button[10] || KeyListener::key[ALLEGRO_KEY_7]) {
-    al_draw_bitmap(img_joystick_button[6].get(), SCREEN_W / 2 + 181,
-                   SCREEN_H - 551, 0);
-  }
-  if (JoystickListener::button[11] || KeyListener::key[ALLEGRO_KEY_8]) {
-    al_draw_bitmap(img_joystick_button[7].get(), SCREEN_W / 2 + 251,
-                   SCREEN_H - 546, 0);
+  for (int i = 0; i < BUTTON_COUNT; i++) {
+    const auto& button = BUTTONS.at(i);
+
+    if (button_down(button)) {
+      asw::draw::sprite(
+          img_joystick_button.at(i),
+          asw::Vec2f((SCREEN_W / 2) + button.x, SCREEN_H + button.y));
+    }
   }
 
-  // Stick
-  if ((JoystickListener::stick[0] && JoystickListener::stick[1]) ||
-      (KeyListener::key[ALLEGRO_KEY_LEFT] &&
-       KeyListener::key[ALLEGRO_KEY_UP])) {
-    al_draw_bitmap(img_joystick_positions[0].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[0] && JoystickListener::stick[1]) ||
-             (KeyListener::key[ALLEGRO_KEY_RIGHT] &&
-              KeyListener::key[ALLEGRO_KEY_UP])) {
-    al_draw_bitmap(img_joystick_positions[2].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[0] && JoystickListener::stick[1]) ||
-             (KeyListener::key[ALLEGRO_KEY_RIGHT] &&
-              KeyListener::key[ALLEGRO_KEY_DOWN])) {
-    al_draw_bitmap(img_joystick_positions[4].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[0] && JoystickListener::stick[1]) ||
-             (KeyListener::key[ALLEGRO_KEY_LEFT] &&
-              KeyListener::key[ALLEGRO_KEY_DOWN])) {
-    al_draw_bitmap(img_joystick_positions[6].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[1]) || KeyListener::key[ALLEGRO_KEY_UP]) {
-    al_draw_bitmap(img_joystick_positions[1].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[0]) ||
-             KeyListener::key[ALLEGRO_KEY_RIGHT]) {
-    al_draw_bitmap(img_joystick_positions[3].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[1]) ||
-             KeyListener::key[ALLEGRO_KEY_DOWN]) {
-    al_draw_bitmap(img_joystick_positions[5].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  } else if ((JoystickListener::stick[0]) ||
-             KeyListener::key[ALLEGRO_KEY_LEFT]) {
-    al_draw_bitmap(img_joystick_positions[7].get(), SCREEN_W / 2 - 306,
-                   SCREEN_H - 553, 0);
-  }
+  drawStick();
 
   // Minigame
-  al_draw_bitmap(ship.get(), ship_x, ship_y, 0);
+  asw::draw::sprite(ship, ship_position);
 
-  // Draw mouse if joystick not in use
-  if (!hide_mouse) {
-    al_draw_bitmap(cursor.get(), MouseListener::mouse_x, MouseListener::mouse_y,
-                   0);
+  // When using joystick, dont show mouse
+  if (!controls::using_controller()) {
+    asw::draw::sprite(cursor, asw::input::get_mouse().position);
   }
 }

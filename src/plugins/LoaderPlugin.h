@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "../game/Game.h"
-#include "../util/Logger.h"
 
 /**
  * @brief Loader Plugin Interface
@@ -12,6 +11,13 @@
  */
 class LoaderPlugin {
  public:
+  LoaderPlugin() = default;
+  LoaderPlugin(const LoaderPlugin&) = default;
+  LoaderPlugin& operator=(const LoaderPlugin&) = default;
+  LoaderPlugin(LoaderPlugin&&) = default;
+  LoaderPlugin& operator=(LoaderPlugin&&) = default;
+  virtual ~LoaderPlugin() = default;
+
   /**
    * @brief Validate the plugin
    *
@@ -36,19 +42,37 @@ class LoaderPlugin {
    * @brief Get name
    *
    */
-  virtual std::string getName() = 0;
+  virtual std::string getName() const = 0;
+
+  /**
+   * @brief Pick up games found in the background, called each frame
+   *
+   * @return true - If the list of games changed
+   */
+  virtual bool update() { return false; }
 
   /**
    * @brief List games loaded by plugin
    *
-   * @return std::vector<Game> - List of games
+   * @return const std::vector<Game>& - List of games
    */
-  std::vector<Game> listGames() { return games; }
+  const std::vector<Game>& listGames() const { return games; }
 
  protected:
-  /// @brief List of games loaded by plugin
-  std::vector<Game> games{};
+  /**
+   * @brief Add a game to the list of loaded games
+   *
+   * @param game - Game to add
+   */
+  void addGame(Game game) { games.push_back(std::move(game)); }
 
-  /// @breif Logger instance
-  Logger logger = Logger("LoaderPlugin");
+  /**
+   * @brief Remove every loaded game
+   *
+   */
+  void clearGames() { games.clear(); }
+
+ private:
+  /// @brief List of games loaded by plugin
+  std::vector<Game> games;
 };

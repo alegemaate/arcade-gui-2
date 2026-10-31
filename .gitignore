@@ -81,6 +81,7 @@ $RECYCLE.BIN/
 *.exe
 *.dll
 *.cmake
+!cmake/*.cmake
 CMakeFiles
 CMakeCache.txt
 Makefile

@@ -1,50 +1,42 @@
 #pragma once
 
-#include <string>
-
-#include "core/Bitmap.h"
-#include "core/Vec3.h"
+#include <asw/asw.h>
 
 struct ColorBackgroundPreset {
-  Vec3<double> color;
-  Vec3<double> color_direction;
-  Bitmap overlay_image;
+  asw::Vec3f color;
+  asw::Vec3f color_direction;
+  asw::Texture overlay_image;
 };
 
 class ColorBackground {
  public:
   /**
-   * @brief Construct a new Color Background object
-   *
-   */
-  ColorBackground();
-
-  /**
    * @brief Setup the colors of the background.
    *
    * @param preset - Color preset
    */
-  void setPreset(ColorBackgroundPreset preset);
+  void setPreset(const ColorBackgroundPreset& preset);
 
   /**
    * @brief Change the colors of the background.
    *
+   * @param dt - Time since last update in seconds
    */
-  void changeColors();
+  void changeColors(float dt);
 
   /**
    * @brief Draw the background.
    *
    */
-  void draw();
+  void draw() const;
 
  private:
   /// @brief The current color of the background.
-  Vec3<double> color;
+  asw::Vec3f color{0.0F, 0.0F, 0.0F};
 
   /// @brief The direction the color components are moving.
-  Vec3<double> color_direction;
+  asw::Vec3f color_direction{1.0F, 1.0F, 1.0F};
 
   /// @brief The image to overlay on the background. (vignetted)
-  Bitmap overlay_image;
+  asw::Texture overlay_image;
 };

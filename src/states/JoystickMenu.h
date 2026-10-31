@@ -1,43 +1,38 @@
-#ifndef JOYSTICKMENU_H_
-#define JOYSTICKMENU_H_
+#pragma once
 
-#include "GameState.h"
+#include <asw/asw.h>
 
-#include <allegro5/allegro.h>
-#include <string>
-#include <vector>
+#include <array>
 
 #include "../ColorBackground.h"
-#include "../core/Bitmap.h"
-#include "../globals.h"
-#include "../util/tools.h"
+#include "StateId.h"
 
-class JoystickMenu : public GameState {
+class JoystickMenu : public asw::scene::Scene<StateId> {
  public:
-  // Main loop functions
-  JoystickMenu();
+  using asw::scene::Scene<StateId>::Scene;
 
-  void update();
-
-  void draw();
+  void init() override;
+  void update(float dt) override;
+  void draw() override;
 
  private:
-  Bitmap cursor = Bitmap("./assets/images/cursor.png");
-  Bitmap joystick_background =
-      Bitmap("./assets/images/joystick/joystick_background.png");
-  Bitmap img_joystick_button[8];
-  Bitmap img_joystick_positions[8];
+  /**
+   * @brief Draw the stick in the direction held
+   *
+   */
+  void drawStick() const;
+
+  static constexpr int BUTTON_COUNT = 8;
+
+  asw::Texture cursor;
+  asw::Texture joystick_background;
+  std::array<asw::Texture, BUTTON_COUNT> img_joystick_button;
+  std::array<asw::Texture, BUTTON_COUNT> img_joystick_positions;
 
   // Minigame
-  Bitmap ship = Bitmap("./assets/images/joystick/ship.png");
-  Bitmap joystick_background2 =
-      Bitmap("./assets/images/joystick/background.png");
-  int ship_x = 0;
-  int ship_y = 0;
+  asw::Texture ship;
+  asw::Texture joystick_background2;
+  asw::Vec2f ship_position;
 
-  bool hide_mouse = false;
-
-  ColorBackground main_bg = ColorBackground();
+  ColorBackground main_bg;
 };
-
-#endif  // JOYSTICKMENU_H_

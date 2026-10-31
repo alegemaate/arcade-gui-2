@@ -1,23 +1,12 @@
 #pragma once
 
-#ifdef __unix__
-#include <cstdlib>
-#elif defined(_WIN32) || defined(WIN32)
-#include <shlwapi.h>
-#endif
-
-#include <fstream>
 #include <string>
-#include <vector>
 
-#include "../game/Game.h"
-#include "../util/Logger.h"
+#include "../mame/Library.h"
 #include "LoaderPlugin.h"
 
-const std::string MAME_LOADER_NAME = "MameLoader";
-
 /**
- * @brief Mame Loader Plugin
+ * @brief Lists the rom sets MAME can run
  *
  */
 class MameLoader : public LoaderPlugin {
@@ -25,103 +14,46 @@ class MameLoader : public LoaderPlugin {
   /**
    * @brief Construct a new Mame Loader object
    *
+   * @param library - Rom sets, refreshed before the plugin is loaded
    */
-  MameLoader() {}
-
-  /**
-   * @brief Destroy the Mame Loader object
-   *
-   */
-  ~MameLoader() {}
+  explicit MameLoader(mame::Library& library) : library(library) {}
 
   /**
    * @brief Checks if mame is installed
    *
    * @return true - if mame is installed
-   * @return false - if mame is not installed
    */
-  bool validate() override {
-    logger.log("Checking mame is installed");
-    auto status = system("mame -help > /dev/null");
-    logger.log("Mame installed: " + std::to_string(status == 0));
-    return status == 0;
-  }
+  bool validate() override { return library.isAvailable(); }
 
   /**
-   * @brief Loads games from mame roms list and caches to roms.txt
+   * @brief Add the rom sets found so far
    *
    */
-  void load() override {
-    auto status = verifyRoms();
-
-    if (!status) {
-      logger.log("Mame roms could not be verified");
-      return;
-    }
-
-    std::ifstream rom_file("roms.txt");
-    std::string line;
-
-    while (std::getline(rom_file, line)) {
-      if (line.find("is good") == std::string::npos) {
-        continue;
-      }
-
-      // Remove "romset " and " is good" to get game id
-      std::string rom_name = line.substr(7, line.find(" ", 7) - 7);
-
-      games.push_back({.name = rom_name,
-                       .path = "mame " + rom_name,
-                       .icon = Bitmap("assets/images/icons/icon_mame.png")});
-    }
-
-    rom_file.close();
-  }
+  void load() override;
 
   /**
-   * @brief Revalidates mame roms and caches to roms.txt
+   * @brief Revalidate plugin data, does nothing
    *
    */
-  void revalidate() override { verifyRoms(true); }
+  void revalidate() override {}
+
+  /**
+   * @brief Pick up a finished scan
+   *
+   * @return true - If the list changed
+   */
+  bool update() override;
 
   /**
    * @brief Return name of plugin
    *
    * @return std::string - name of plugin
    */
-  std::string getName() override { return MAME_LOADER_NAME; }
+  std::string getName() const override { return "MameLoader"; }
 
  private:
-  /**
-   * @brief Verifies mame roms and caches to roms.txt
-   *
-   * @param skipCache - skips cache and verifies roms again
-   * @return true - if roms are verified
-   * @return false
-   */
-  bool verifyRoms(bool skipCache = false) {
-    std::ifstream rom_file("roms.txt");
+  mame::Library& library;
 
-    if (rom_file.good() && !skipCache) {
-      logger.log("Mame roms already verified, loading cache");
-      return true;
-    } else if (skipCache) {
-      logger.log("Mame roms cache skipped");
-    } else {
-      logger.log("Mame roms cache not found");
-    }
-
-    auto status = system("mame -verifyroms > roms.txt");
-
-    if (status != 0) {
-      logger.log("Error verifying roms");
-    }
-
-    rom_file.close();
-
-    return status == 0;
-  }
-
-  /// @brief Logger instance
-  Logger logger = Logger(MAME_LOADER_NAME);
+  /// @brief Library generation of the games loaded
+  unsigned generation = 0;
 };

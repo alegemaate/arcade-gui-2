@@ -1,0 +1,109 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [LINUX, WINDOWS, MAC]
+    runs-on: >-
+      ${{ matrix.platform == 'WINDOWS' && 'windows-latest'
+      || matrix.platform == 'MAC' && 'macos-latest'
+      || 'ubuntu-latest' }}
+    env:
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          path: .cpm-cache
+          key: cpm-${{ matrix.platform }}-${{ hashFiles('CMakeLists.txt', 'cmake/**') }}
+          restore-keys: cpm-${{ matrix.platform }}-
+
+      - name: Install Linux libraries
+        if: matrix.platform == 'LINUX'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential pkg-config libssl-dev \
+            libasound2-dev libpulse-dev libpipewire-0.3-dev \
+            libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev \
+            libxi-dev libxss-dev libxtst-dev libxkbcommon-dev \
+            libwayland-dev wayland-protocols libdecor-0-dev \
+            libdrm-dev libgbm-dev libgl1-mesa-dev libegl1-mesa-dev \
+            libdbus-1-dev libudev-dev libibus-1.0-dev
+
+      - name: Build Linux and Mac
+        if: matrix.platform != 'WINDOWS'
+        run: |
+          cmake --preset release
+          cmake --build --preset release
+
+      # MinGW linked statically so no runtime DLLs need shipping
+      - name: Setup MSYS2
+        if: matrix.platform == 'WINDOWS'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: make git
+          pacboy: >-
+            toolchain:p
+            cmake:p
+            egl-headers:p
+            gles-headers:p
+            openssl:p
+
+      - name: Build Windows
+        if: matrix.platform == 'WINDOWS'
+        shell: msys2 {0}
+        run: |
+          git config --global core.longpaths true
+          cmake --preset release -DCMAKE_EXE_LINKER_FLAGS="-static"
+          cmake --build --preset release
+
+      # Tar keeps the executable bit, then zip for the release page
+      - name: Pack build
+        shell: bash
+        run: |
+          mkdir -p dist
+          tar -C build/release/target -czf "dist/arcade-gui-2-${{ matrix.platform }}.tar.gz" .
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: build-${{ matrix.platform }}
+          path: dist/*
+          retention-days: 7
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    if: startsWith(github.ref, 'refs/heads/main')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: build-*
+          path: dist
+          merge-multiple: true
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
