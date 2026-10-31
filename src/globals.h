@@ -1,8 +1,5 @@
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#pragma once
 
-// Screen size
-extern int SCREEN_W;
-extern int SCREEN_H;
-
-#endif  // GLOBALS_H_
+// Logical screen size, the display scales it to fit the window
+inline constexpr float SCREEN_W = 1920.0F;
+inline constexpr float SCREEN_H = 1080.0F;
